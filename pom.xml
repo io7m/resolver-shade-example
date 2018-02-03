@@ -118,6 +118,30 @@
   <build>
     <pluginManagement>
       <plugins>
+
+        <!-- Add the java-extra directory to the build               -->
+        <!-- This contains a module descriptor that must be compiled -->
+        <!-- separately due to shading of dependencies.              -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>${io7m.build-helper-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>add-sources</id>
+              <phase>compile</phase>
+              <goals>
+                <goal>add-source</goal>
+              </goals>
+              <configuration>
+                <sources>
+                  <source>src/main/java-extra</source>
+                </sources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
         <!-- Require JDK >= 9 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -127,15 +151,49 @@
             <target>9</target>
             <release>9</release>
           </configuration>
+
+          <executions>
+
+            <!-- Compile the real sources. -->
+            <execution>
+              <id>default-compile</id>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+              <phase>compile</phase>
+              <configuration>
+                <excludes>
+                  <exclude>module-info.java</exclude>
+                  <exclude>com/io7m/resolver/Stub.java</exclude>
+                </excludes>
+              </configuration>
+            </execution>
+
+            <!-- Compile the module descriptor against a fake module. -->
+            <execution>
+              <id>compile-extra</id>
+              <goals>
+                <goal>compile</goal>
+              </goals>
+              <phase>compile</phase>
+              <configuration>
+                <excludes>
+                  <exclude>com/io7m/resolver/Main.java</exclude>
+                </excludes>
+              </configuration>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
+
+      <!-- Produce a shaded module. -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>3.1.0</version>
+        <version>${io7m.maven-shade-plugin.version}</version>
 
         <executions>
           <execution>
@@ -152,8 +210,6 @@
               </transformers>
 
               <minimizeJar>true</minimizeJar>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>embedded</shadedClassifierName>
 
               <artifactSet>
                 <includes>
@@ -232,6 +288,33 @@
         </executions>
       </plugin>
 
+      <!-- Copy the separately compiled module-info.class into the shaded jar -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>truezip-maven-plugin</artifactId>
+        <version>${io7m.truezip-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>add-module-info</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <verbose>true</verbose>
+              <fileset>
+                <directory>${project.build.directory}/classes</directory>
+                <includes>
+                  <include>module-info.class</include>
+                </includes>
+                <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}.jar/</outputDirectory>
+              </fileset>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Make all jars reproducible. -->
       <plugin>
         <groupId>io.github.zlika</groupId>
         <artifactId>reproducible-build-maven-plugin</artifactId>
