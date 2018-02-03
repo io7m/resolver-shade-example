@@ -172,7 +172,7 @@
               <relocations>
                 <relocation>
                   <pattern>com.google</pattern>
-                  <shadedPattern>__internal.com.google</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.com.google</shadedPattern>
                   <includes>
                     <include>com.google.**</include>
                   </includes>
@@ -180,7 +180,7 @@
 
                 <relocation>
                   <pattern>org.codehaus.plexus</pattern>
-                  <shadedPattern>__internal.org.codehaus.plexus</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.org.codehaus.plexus</shadedPattern>
                   <includes>
                     <include>org.codehaus.plexus.**</include>
                   </includes>
@@ -188,7 +188,7 @@
 
                 <relocation>
                   <pattern>org.apache</pattern>
-                  <shadedPattern>__internal.org.apache</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.org.apache</shadedPattern>
                   <includes>
                     <include>org.apache.**</include>
                   </includes>
@@ -196,7 +196,7 @@
 
                 <relocation>
                   <pattern>javax.inject</pattern>
-                  <shadedPattern>__internal.javax.inject</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.javax.inject</shadedPattern>
                   <includes>
                     <include>javax.inject.**</include>
                   </includes>
@@ -204,7 +204,7 @@
 
                 <relocation>
                   <pattern>org.eclipse.aether</pattern>
-                  <shadedPattern>__internal.org.eclipse.aether</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.org.eclipse.aether</shadedPattern>
                   <includes>
                     <include>org.eclipse.aether.**</include>
                   </includes>
@@ -212,7 +212,7 @@
 
                 <relocation>
                   <pattern>licenses</pattern>
-                  <shadedPattern>__internal.licenses</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.licenses</shadedPattern>
                   <includes>
                     <include>licenses.**</include>
                   </includes>
@@ -220,7 +220,7 @@
 
                 <relocation>
                   <pattern>mozilla</pattern>
-                  <shadedPattern>__internal.mozilla</shadedPattern>
+                  <shadedPattern>com.io7m.resolver.internal.mozilla</shadedPattern>
                   <includes>
                     <include>mozilla.**</include>
                   </includes>
